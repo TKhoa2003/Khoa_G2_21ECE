@@ -1,0 +1,56 @@
+import cv2
+import numpy as np
+import mediapipe as mp
+
+class LipsDetectionModule():
+    def __init__(self, minDetectionCon=0.5):
+        self.minDetectionCon = minDetectionCon
+        self.mpFaceMesh = mp.solutions.face_mesh
+        self.faceMesh = self.mpFaceMesh.FaceMesh(self.minDetectionCon, max_num_faces=1)
+        self.mpDraw = mp.solutions.drawing_utils
+
+    def findLipsColorRange(self, img):
+        img_RGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        self.results = self.faceMesh.process(img_RGB)
+
+        lips_colors = []
+
+        if self.results.multi_face_landmarks:
+            for face_landmarks in self.results.multi_face_landmarks:
+                for landmark in face_landmarks.landmark:
+                    h, w, _ = img.shape
+                    x, y = int(landmark.x * w), int(landmark.y * h)
+                    
+                    # Extract lip color around the landmark
+                    lip_color = img[y, x]
+                    lips_colors.append(lip_color)
+
+        # Calculate dominant lip colors
+        lips_colors = np.array(lips_colors)
+        dominant_colors = []
+
+        for percentile in [40, 30, 20, 10]:
+            quantile_color = np.quantile(lips_colors, percentile / 100, axis=0).astype(np.uint8)
+            dominant_colors.append(quantile_color)
+
+        return dominant_colors
+
+
+def main():
+    path = "assets/oil-image.jpg"
+    img = cv2.imread(path)
+    if img is None:
+        print("Error: Could not open or read the image.")
+        return
+
+    lipsDetector = LipsDetectionModule(minDetectionCon=0.5)
+    dominant_colors = lipsDetector.findLipsColorRange(img)
+
+    print("Dominant lip colors at different percentages:")
+    for percentile, color in zip([40, 30, 20, 10], dominant_colors):
+        hex_color = "#{:02x}{:02x}{:02x}".format(*color[::-1])
+        print(f"{percentile}%: {hex_color}")
+
+
+if __name__ == "__main__":
+    main()
