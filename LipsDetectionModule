@@ -28,13 +28,12 @@ class LipsDetectionModule():
 
 
 def main():
-    path = "DeLips_1.jpg"
+    path = "assets/oil-image.jpg"
     img = cv2.imread(path)
     if img is None:
         print("Error: Could not open or read the image.")
         return
 
-    img = cv2.resize(img, (800, 480), interpolation=cv2.INTER_AREA)
     lipsDetector = LipsDetectionModule(minDetectionCon=0.5)
 
     img, lips_landmarks = lipsDetector.findLips(img)
