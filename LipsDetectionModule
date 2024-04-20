@@ -1,0 +1,47 @@
+import cv2
+import mediapipe as mp
+
+class LipsDetectionModule():
+    def __init__(self, minDetectionCon=0.5):
+        self.minDetectionCon = minDetectionCon
+        self.mpFaceMesh = mp.solutions.face_mesh
+        self.faceMesh = self.mpFaceMesh.FaceMesh(self.minDetectionCon, max_num_faces=1)
+        self.mpDraw = mp.solutions.drawing_utils
+
+    def findLips(self, img, draw=True):
+        img_RGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        self.results = self.faceMesh.process(img_RGB)
+
+        lips_landmarks = []
+        if self.results.multi_face_landmarks:
+            for face_landmarks in self.results.multi_face_landmarks:
+                for id, landmark in enumerate(face_landmarks.landmark):
+                    h, w, c = img.shape
+                    x, y = int(landmark.x * w), int(landmark.y * h)
+                    lips_landmarks.append([id, x, y])
+
+                if draw:
+                    self.mpDraw.draw_landmarks(img, face_landmarks, self.mpFaceMesh.FACEMESH_LIPS,
+                                               landmark_drawing_spec=None)
+
+        return img, lips_landmarks
+
+
+def main():
+    path = "DeLips_1.jpg"
+    img = cv2.imread(path)
+    if img is None:
+        print("Error: Could not open or read the image.")
+        return
+
+    img = cv2.resize(img, (800, 480), interpolation=cv2.INTER_AREA)
+    lipsDetector = LipsDetectionModule(minDetectionCon=0.5)
+
+    img, lips_landmarks = lipsDetector.findLips(img)
+
+    cv2.imshow("Detected Lips", img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    main()
