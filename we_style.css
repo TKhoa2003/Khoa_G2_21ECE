@@ -86,6 +86,11 @@ body {
   width: 60%
 }
 
+.weather-box,
+.weather-details {
+  visibility: hidden;
+}
+
 .weather-box .temperature {
   position: relative;
   font-size: 64px;
