@@ -8,11 +8,11 @@
 }
 
 body {
-  display:flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: url('images/webackgr.jpg');
+  background: url('./webackgr.jpg');
   background-size: cover;
   background-position: center;
   overflow: hidden;
@@ -24,11 +24,12 @@ body {
   height: 555px;
   background: rgba(255, 255, 255, .1);
   backdrop-filter: blur(30px);
-  border: 2px soild  rgba(255, 255, 255, .2);
+  border: 2px solid rgba(255, 255, 255, .2);
   border-radius: 16px;
   padding: 20px;
   color: #fff;
   transition: height .6s ease;
+  margin-right: 30%;
 }
 
 .search-box {
@@ -50,7 +51,7 @@ body {
   width: 100%;
   height: 100%;
   background: transparent;
-  border: 2px soild  rgba(255, 255, 255, .2);
+  border: 2px solid rgba(255, 255, 255, .2);
   outline: none;
   border-radius: 10px;
   font-size: 22px;
@@ -99,7 +100,7 @@ body {
 
 .weather-box.box,
 .not-found.box {
-  transform:translateY(-100%);
+  transform: translateY(-100%);
 }
 
 .weather-box.active .box,
@@ -121,12 +122,12 @@ body {
 }
 
 .weather-box img {
-  width: 60%
+  width: 40%;
 }
 
 .weather-box .temperature {
   position: relative;
-  font-size: 64px;
+  font-size: 50px;
   line-height: 1;
   font-weight: 700;
   margin: 20px  6px -30px;
@@ -135,64 +136,52 @@ body {
 .weather-box .temperature span {
   position: absolute;
   font-size:24px;
-  margin-1eft:4px;
+  margin-left:4px;
 }
 
-.weather-box .decription {
-  font-size: 22px;
-  font-weight: 500;
+.weather-box .description {
+  font-size: 24px;
+  font-weight: 555;
   text-transform: capitalize;
+  margin: 20px  6px -10px;
+  padding:  40px;
 }
 
 .weather-details {
   position: absolute;
-  bottom:40px;
+  bottom:20px;
   left:0;
   width:100%;
-  padding:  20px;
+  padding:  30px;
   display: flex;
+  opacity: 0;       /*Add for effect fix*/
 }
 
 .weather-details .humidity,
 .weather-details .wind {
-  display: flex;
-  align-items: center;
-  width:50%;
-  transform: translateY(-100%);
+  flex: 1;
+  text-align: center;
 }
 
-.weather-details.active .humidity,
-.weather-details.active .wind {
-  transform: translateY(0%);
-  transition: transform 1s ease;
-  transition-delay:1.2s;
+.weather-details.active {
+  opacity: 1; /* Make the weather details visible when active */
+  transition: opacity 1s ease; /* Apply transition only to opacity */
 }
 
 .weather-details .humidity .info-humidity,
 .weather-details .wind .info-wind {
-  transform: translateY(-100%);
-  olverflow: hidden;
-}
-
-.weather-details .humidity {
-  Padding-left: 20px;
-  justify-content: flex-start;
-}
-
-.weather-details .wind {
-  Padding-right: 20px;
-  justify-content: flex-start;
+  overflow: hidden;
 }
 
 .weather-details i {
   font-size: 56px;
-  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .weather-details span {
-  display:inline-block;
-  font-size:22px;
-  font-weight:500;
+  display: block;
+  font-size: 22px;
+  font-weight: 500;
 }
 
 .weather-details p {
@@ -232,16 +221,16 @@ body {
 
 #clone-info-weather.weather {
   transform:translateY(120%);
-  transition: transform 1s ease, opacity Os;
-  transition-delay:Os,2s;
+  transition: transform 1s ease, opacity 0s;
+  transition-delay:0s,2s;
 }
 
 .weather-box:not(.active) #clone-info-weather .weather {
   opacity:0;
-  transition-delay: Os;
+  transition-delay: 0s;
 }
 
-.active-clone#clone-info-weather.weather {
+.active-clone #clone-info-weather.weather {
   transform:translateY(0%);
 }
 
@@ -251,8 +240,7 @@ body {
   transition: transform 1s ease;
 }
 
-.active-clone#clone-info-humidity span,
-.active-clone#clone-info-wind span {
+.active-clone #clone-info-humidity span,
+.active-clone #clone-info-wind span {
   transform: translateY(0%);
 }
-
